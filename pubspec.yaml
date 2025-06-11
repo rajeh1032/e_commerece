@@ -42,6 +42,11 @@ dependencies:
   auto_size_text: ^3.0.0
   dartz: ^0.10.1
   dio: ^5.8.0+1
+  connectivity_plus: ^6.1.4
+  flutter_bloc: ^9.1.1
+  provider: ^6.1.5
+  injectable: ^2.5.0
+  get_it: ^8.0.3
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +58,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.13
+  injectable_generator: ^2.6.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

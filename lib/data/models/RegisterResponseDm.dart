@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class RegisterResponseDm extends RegisterResponseEntity {
   RegisterResponseDm({
+   super.statusMsg,
     super.message,
     super.user,
     super.token,

@@ -1,11 +1,16 @@
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_theme.dart';
+import 'package:e_commerece/core/utils/my_bloc_observer.dart';
+import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:e_commerece/features/ui/auth/login/login_screen.dart';
 import 'package:e_commerece/features/ui/auth/register/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
+   Bloc.observer = MyBlocObserver();
+   configureDependencies(); 
   runApp(const MyApp());
 }
 
