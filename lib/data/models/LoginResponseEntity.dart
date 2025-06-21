@@ -1,5 +1,4 @@
 import 'package:e_commerece/domain/entities/LoginResponseEntity.dart';
-import 'package:e_commerece/domain/entities/RegisterResponseEntity.dart';
 
 class LoginResponseDm extends LoginResponseEntity {
   LoginResponseDm({

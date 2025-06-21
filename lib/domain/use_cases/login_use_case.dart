@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_commerece/core/errors/failures.dart';
 import 'package:e_commerece/domain/entities/LoginResponseEntity.dart';
-import 'package:e_commerece/domain/entities/RegisterResponseEntity.dart';
 import 'package:e_commerece/domain/repositories/auth/auth_repostiory.dart';
 import 'package:injectable/injectable.dart';
 

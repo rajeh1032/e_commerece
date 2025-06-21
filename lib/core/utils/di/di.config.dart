@@ -22,6 +22,8 @@ import '../../../domain/use_cases/register_use_case.dart' as _i311;
 import '../../../features/ui/auth/login/cubit/login_view_model.dart' as _i51;
 import '../../../features/ui/auth/register/cubit/register_view_model.dart'
     as _i504;
+import '../../../features/ui/pages/home_screen/cubit/home_screen_view_model.dart'
+    as _i543;
 import '../../api/api_manger.dart' as _i254;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -35,6 +37,7 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i543.HomeScreenViewModel>(() => _i543.HomeScreenViewModel());
     gh.singleton<_i254.ApiManger>(() => _i254.ApiManger());
     gh.factory<_i930.AuthRemoteDataSource>(
         () => _i758.AuthRemoteDataSourceImpl(apiMAnger: gh<_i254.ApiManger>()));

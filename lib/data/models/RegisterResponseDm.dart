@@ -1,5 +1,4 @@
 import 'package:e_commerece/domain/entities/RegisterResponseEntity.dart';
-import 'package:flutter/material.dart';
 
 class RegisterResponseDm extends RegisterResponseEntity {
   RegisterResponseDm({

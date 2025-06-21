@@ -6,8 +6,6 @@ import 'package:e_commerece/core/errors/failures.dart';
 import 'package:e_commerece/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:e_commerece/data/models/LoginResponseEntity.dart';
 import 'package:e_commerece/data/models/RegisterResponseDm.dart';
-import 'package:e_commerece/domain/entities/LoginResponseEntity.dart';
-import 'package:e_commerece/domain/entities/RegisterResponseEntity.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: AuthRemoteDataSource)

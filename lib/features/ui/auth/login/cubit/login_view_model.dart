@@ -1,6 +1,5 @@
 import 'package:e_commerece/domain/use_cases/login_use_case.dart';
 import 'package:e_commerece/features/ui/auth/login/cubit/login_states.dart';
-import 'package:e_commerece/features/ui/auth/register/cubit/register_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';

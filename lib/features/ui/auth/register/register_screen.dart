@@ -45,7 +45,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               context: context,
               message: 'Register Successfully',
               title: 'Success',
-              posActionName: 'ok');
+              posActionName: 'ok',
+              posAction: () {
+                //todo: navigate to home screen
+
+                Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
+              });
         }
       },
       child: Scaffold(
@@ -127,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               validator: AppValidators.validatePassword,
                               suffixIcon: IconButton(
                                   onPressed: () {},
-                                  icon: Icon(Icons.visibility_off)),
+                                  icon: const Icon(Icons.visibility_off)),
                             ),
                             Text(
                               "Re-Password",
@@ -144,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               validator: AppValidators.validatePassword,
                               suffixIcon: IconButton(
                                   onPressed: () {},
-                                  icon: Icon(Icons.visibility_off)),
+                                  icon: const Icon(Icons.visibility_off)),
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: 35.h),

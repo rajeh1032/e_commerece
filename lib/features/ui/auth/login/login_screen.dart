@@ -41,6 +41,8 @@ class LoginScreen extends StatelessWidget {
               posActionName: 'ok',
               posAction: () {
                 //todo: navigate to home screen
+
+                Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
               });
         }
       },
@@ -104,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                             validator: AppValidators.validatePassword,
                             suffixIcon: IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.visibility_off)),
+                                icon: const Icon(Icons.visibility_off)),
                           ),
                           InkWell(
                             onTap: () {},
@@ -122,6 +124,7 @@ class LoginScreen extends StatelessWidget {
                                 text: "Login",
                                 onPressed: () {
                                   viewModel.login();
+                              
                                 }),
                           ),
                           Padding(

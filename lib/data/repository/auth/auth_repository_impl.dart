@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:e_commerece/core/errors/failures.dart';
 import 'package:e_commerece/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:e_commerece/domain/entities/LoginResponseEntity.dart';
