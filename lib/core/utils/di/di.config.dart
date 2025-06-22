@@ -13,10 +13,19 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../../data/data_sources/remote/auth_remote_data_source.dart'
     as _i930;
+import '../../../data/data_sources/remote/home_remote_data_source.dart'
+    as _i382;
 import '../../../data/data_sources/remote/impl/auth_remote_data_source_impl.dart'
     as _i758;
+import '../../../data/data_sources/remote/impl/home_remote_data_source_impl.dart'
+    as _i727;
 import '../../../data/repository/auth/auth_repository_impl.dart' as _i207;
+import '../../../data/repository/home/home_repository_impl.dart' as _i846;
 import '../../../domain/repositories/auth/auth_repostiory.dart' as _i511;
+import '../../../domain/repositories/home/home_repository.dart' as _i212;
+import '../../../domain/use_cases/get_all_Brand_use_case.dart' as _i116;
+import '../../../domain/use_cases/get_all_brand_use_case.dart' as _i532;
+import '../../../domain/use_cases/get_all_category_use_case.dart' as _i563;
 import '../../../domain/use_cases/login_use_case.dart' as _i798;
 import '../../../domain/use_cases/register_use_case.dart' as _i311;
 import '../../../features/ui/auth/login/cubit/login_view_model.dart' as _i51;
@@ -24,6 +33,8 @@ import '../../../features/ui/auth/register/cubit/register_view_model.dart'
     as _i504;
 import '../../../features/ui/pages/home_screen/cubit/home_screen_view_model.dart'
     as _i543;
+import '../../../features/ui/pages/home_screen/tabs/home_tab/cubit/home_tab_view_model.dart'
+    as _i1013;
 import '../../api/api_manger.dart' as _i254;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -41,16 +52,30 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i254.ApiManger>(() => _i254.ApiManger());
     gh.factory<_i930.AuthRemoteDataSource>(
         () => _i758.AuthRemoteDataSourceImpl(apiMAnger: gh<_i254.ApiManger>()));
+    gh.factory<_i382.HomeRemoteDataSource>(
+        () => _i727.HomeRemoteDataSourceImpl(apiMAnger: gh<_i254.ApiManger>()));
     gh.factory<_i511.AuthRepository>(() => _i207.AuthRepositoryImpl(
         authRemoteDataSource: gh<_i930.AuthRemoteDataSource>()));
-    gh.factory<_i311.RegisterUseCase>(() =>
-        _i311.RegisterUseCase(authRepository: gh<_i511.AuthRepository>()));
+    gh.factory<_i212.HomeRepository>(
+        () => _i846.HomeRepositoryImpl(gh<_i382.HomeRemoteDataSource>()));
     gh.factory<_i798.LoginUseCase>(
         () => _i798.LoginUseCase(authRepository: gh<_i511.AuthRepository>()));
+    gh.factory<_i311.RegisterUseCase>(() =>
+        _i311.RegisterUseCase(authRepository: gh<_i511.AuthRepository>()));
+    gh.factory<_i563.GetAllCategoryUseCase>(() => _i563.GetAllCategoryUseCase(
+        homeRepository: gh<_i212.HomeRepository>()));
+    gh.factory<_i532.GetAllBrandUseCase>(() =>
+        _i532.GetAllBrandUseCase(homeRepository: gh<_i212.HomeRepository>()));
+    gh.factory<_i116.GetAllBrandUseCase>(() =>
+        _i116.GetAllBrandUseCase(homeRepository: gh<_i212.HomeRepository>()));
     gh.factory<_i504.RegisterViewModel>(() =>
         _i504.RegisterViewModel(registerUseCase: gh<_i311.RegisterUseCase>()));
     gh.factory<_i51.LoginViewModel>(
         () => _i51.LoginViewModel(loginUseCase: gh<_i798.LoginUseCase>()));
+    gh.factory<_i1013.HomeTabViewModel>(() => _i1013.HomeTabViewModel(
+          getAllCategoryUseCase: gh<_i563.GetAllCategoryUseCase>(),
+          getAllBrandUseCase: gh<_i116.GetAllBrandUseCase>(),
+        ));
     return this;
   }
 }

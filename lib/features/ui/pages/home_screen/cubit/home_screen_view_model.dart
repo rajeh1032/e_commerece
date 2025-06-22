@@ -14,10 +14,10 @@ class HomeScreenViewModel extends Cubit<HomeScreenState> {
   int selectedIndex = 0;
 
   List<Widget> bodyList = [
-    const HomeTab(),
-    const ProductTab(),
-    const FavoriteTab(),
-    const UserTab()
+     HomeTab(),
+     ProductTab(),
+     FavoriteTab(),
+     UserTab()
   ];
 
   void bottomNavOnTap(int index) {
