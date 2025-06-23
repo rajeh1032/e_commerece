@@ -1,0 +1,18 @@
+import 'package:e_commerece/core/errors/failures.dart';
+import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
+
+abstract class ProductTabStates {}
+
+class ProductInitialState extends ProductTabStates {}
+
+class ProductLoadingState extends ProductTabStates {}
+
+class ProductSuccessState extends ProductTabStates {
+  GetProductResponseEntity getProductResponseEntity;
+  ProductSuccessState({required this.getProductResponseEntity});
+}
+
+class ProductErrorState extends ProductTabStates {
+  Failures failures;
+  ProductErrorState({required this.failures});
+}

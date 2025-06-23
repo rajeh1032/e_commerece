@@ -48,40 +48,48 @@ class _HomeTabState extends State<HomeTab> {
 
               //معنها يرجع view model بعد ما ينادي ع الفانكشن
               bloc: viewModel..getAllCategory(),
+              buildWhen: (previous, current) =>
+                  current is CategoryLoadingState ||
+                  current is CategorySuccessState ||
+                  current is CategoryErrorState,
               builder: (context, state) {
-                return viewModel.categoriesList.isNotEmpty
-                    ? _buildCategoryBrandSec(List: viewModel.categoriesList)
-                    : const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryColor,
-                        ),
-                      );
+                // return viewModel.categoriesList.isNotEmpty
+                //     ? _buildCategoryBrandSec(List: viewModel.categoriesList)
+                //     : const Center(
+                //         child: CircularProgressIndicator(
+                //           color: AppColors.primaryColor,
+                //         ),
+                //       );
 
                 ///or
-                // if (state is CategoryLoadingState) {
-                //   return const Center(
-                //     child: CircularProgressIndicator(
-                //       color: AppColors.primaryColor,
-                //     ),
-                //   );
-                // } else if (state is CategoryErrorState) {
-                //   return Text(
-                //     state.failures.errorMessage,
-                //     style: AppStyles.medium18Header
-                //         .copyWith(color: AppColors.primaryColor),
-                //   );
-                // } else if (state is CategorySuccessState) {
-                //   return _buildCategoryBrandSec(
-                //       categoryList: state.getAllCategoryResponseEntity
-                //           .data! // || viewModel.categoryList
-                //       );
-                // }
-                // return Container();
+                if (state is CategoryLoadingState) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    ),
+                  );
+                } else if (state is CategoryErrorState) {
+                  return Text(
+                    state.failures.errorMessage,
+                    style: AppStyles.medium18Header
+                        .copyWith(color: AppColors.primaryColor),
+                  );
+                } else if (state is CategorySuccessState) {
+                  return _buildCategoryBrandSec(
+                      List: state.getAllCategoryResponseEntity
+                          .data! // || viewModel.categoryList
+                      );
+                }
+                return Container();
               }),
 
           _lineBreak(name: "Brands"),
           BlocBuilder<HomeTabViewModel, HomeTabStates>(
             bloc: viewModel..getAllBrand(),
+            buildWhen: (previous, current) =>
+                current is BrandLoadingState ||
+                current is BrandSuccessState ||
+                current is BrandErrorState,
             builder: (context, state) {
               if (state is BrandLoadingState) {
                 return const Center(

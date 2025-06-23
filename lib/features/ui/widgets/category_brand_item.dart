@@ -17,7 +17,7 @@ class CategoryBrandItem extends StatelessWidget {
           child: CachedNetworkImage(
             height: 10.h,
             width: double.infinity,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
             imageUrl: categoryList.image!,
             imageBuilder: (context, ImageProvider) {
               return CircleAvatar(
