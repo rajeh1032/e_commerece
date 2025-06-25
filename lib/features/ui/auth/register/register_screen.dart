@@ -1,6 +1,7 @@
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
+import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:e_commerece/core/utils/dialog_utils.dart';
 import 'package:e_commerece/core/utils/validators.dart';
@@ -47,6 +48,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               title: 'Success',
               posActionName: 'ok',
               posAction: () {
+                //               //todo: save token in shared pref
+
+                SharedPreferenceUtils.saveData(
+                    key: 'token', value: state.registerResponseEntity.token);
+
                 //todo: navigate to home screen
 
                 Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:e_commerece/core/api/api_endpoint.dart';
 import 'package:e_commerece/core/api/api_manger.dart';
 import 'package:e_commerece/core/errors/failures.dart';
+import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:e_commerece/data/models/GetAllCategoryResponseOrBrandDm.dart';
 import 'package:e_commerece/data/models/GetProductResponseDm.dart';
@@ -64,6 +65,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         );
         print("RESPONSE Profile BODY: ${response.data}");
         print("STATUS Profile CODE: ${response.statusCode}");
+     
+
 
         var brandResponse =
             GetAllCategoryOrBrandResponseDm.fromJson(response.data);

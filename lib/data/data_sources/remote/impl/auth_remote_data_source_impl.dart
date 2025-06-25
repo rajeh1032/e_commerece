@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:e_commerece/core/api/api_endpoint.dart';
 import 'package:e_commerece/core/api/api_manger.dart';
 import 'package:e_commerece/core/errors/failures.dart';
+import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:e_commerece/data/models/LoginResponseEntity.dart';
 import 'package:e_commerece/data/models/RegisterResponseDm.dart';
@@ -66,6 +67,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           "password": password,
         });
         var loginResponse = LoginResponseDm.fromJson(response.data);
+        //todo: save token add Shared pref
+        // SharedPreferenceUtils.saveData(
+        //     key: 'token', value: loginResponse.token);
         if (response.statusCode! >= 200 && response.statusCode! < 300) {
           //todo: server ==> success
           return Right(loginResponse);
