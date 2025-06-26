@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/custom_txt.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,10 @@ class ProductTabItem extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         //   todo add to cart
+                        ProductTabViewModel.get(context)
+                            .addToCart(productId: productDataEntity.id ?? '');
+                        print(
+                            "counter of cart ${ProductTabViewModel.get(context).cartCounter}");
                       },
                       splashColor: Colors.transparent,
                       child: Icon(

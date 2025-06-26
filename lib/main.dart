@@ -6,6 +6,7 @@ import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:e_commerece/features/ui/auth/login/login_screen.dart';
 import 'package:e_commerece/features/ui/auth/register/register_screen.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/home_screen.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,9 +24,14 @@ void main() async {
     routeName = AppRoutes.homeRoute;
   }
 
-  runApp(MyApp(
-    routeName: routeName,
-  ));
+  runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<ProductTabViewModel>()),
+        // BlocProvider(create: (context) => getIt<CartViewModel>()),
+      ],
+      child: MyApp(
+        routeName: routeName,
+      )));
 }
 
 class MyApp extends StatelessWidget {

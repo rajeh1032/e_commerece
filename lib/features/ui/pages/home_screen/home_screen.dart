@@ -1,8 +1,12 @@
 import 'package:e_commerece/core/utils/app_assets.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
+import 'package:e_commerece/core/utils/app_routes.dart';
+import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/cubit/home_screen_state.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/cubit/home_screen_view_model.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_states.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bloc: viewModel,
       builder: (context, state) {
         return Scaffold(
-          // appBar: _buildAppBar(),
+          appBar: _buildAppBar(viewModel.selectedIndex, context),
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: viewModel.bodyList[viewModel.selectedIndex],
@@ -80,5 +84,91 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Image.asset(isSelcted ? selectedIcon : unSelectedIcon),
         ),
         label: " ");
+  }
+
+  PreferredSizeWidget _buildAppBar(int index, BuildContext context) {
+    return AppBar(
+      surfaceTintColor: AppColors.transparentColor,
+      elevation: 0,
+      toolbarHeight: index != 3 ? 120.h : kToolbarHeight,
+      leadingWidth: double.infinity,
+      leading: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsGeometry.only(bottom: 10.h),
+              child: Image.asset(
+                AppAssets.routeLogo,
+                width: 66.w,
+                height: 22.h,
+              ),
+            ),
+            Visibility(
+              visible: index != 3,
+              child: Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                          style: AppStyles.regular14Text,
+                          cursorColor: AppColors.primaryColor,
+                          onTap: () {
+                            //todo: implement search logic
+                          },
+                          decoration: InputDecoration(
+                              border: _buildCustomBorder(),
+                              enabledBorder: _buildCustomBorder(),
+                              focusedBorder: _buildCustomBorder(),
+                              contentPadding: EdgeInsets.all(16.h),
+                              hintStyle: AppStyles.light14SearchHint,
+                              hintText: "what do you search for?",
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: 30.sp,
+                                color: AppColors.primaryColor.withOpacity(0.75),
+                              ))),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.of(context).pushNamed(AppRoutes.cartRoute);
+                      },
+                      child: BlocBuilder<ProductTabViewModel, ProductTabStates>(
+                        builder: (context, state) {
+                          return Badge(
+                            alignment: AlignmentDirectional.topStart,
+                            backgroundColor: AppColors.greenColor,
+                            label: Text(
+                              ProductTabViewModel.get(context)
+                                  .cartCounter
+                                  .toString(),
+                            ),
+                            child: ImageIcon(
+                              const AssetImage(AppAssets.shoppingCart),
+                              size: 35.sp,
+                              color: AppColors.primaryColor,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  OutlineInputBorder _buildCustomBorder() {
+    return OutlineInputBorder(
+        borderSide: const BorderSide(
+          color: AppColors.primaryColor,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(50.r));
   }
 }

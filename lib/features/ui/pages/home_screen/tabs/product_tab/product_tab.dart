@@ -13,7 +13,7 @@ class ProductTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: viewModel..getProducts(),
+      bloc:viewModel..getProducts(),
       buildWhen: (previous, current) =>
           current is ProductLoadingState ||
           current is ProductSuccessState ||

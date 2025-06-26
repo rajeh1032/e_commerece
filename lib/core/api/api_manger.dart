@@ -18,11 +18,13 @@ class ApiManger {
   Future<Response> postData(
       {required String endPoint,
       Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers,
       Object? body}) {
     return dio.post(ApiConstants.baseUrl + endPoint,
         queryParameters: queryParameters,
         data: body,
         options: Options(
+          headers: headers,
           validateStatus: (status) => true,
         ));
   }

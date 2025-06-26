@@ -5,6 +5,7 @@ import 'package:e_commerece/core/api/api_manger.dart';
 import 'package:e_commerece/core/errors/failures.dart';
 import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/data/data_sources/remote/home_remote_data_source.dart';
+import 'package:e_commerece/data/models/AddProductToCartDto.dart';
 import 'package:e_commerece/data/models/GetAllCategoryResponseOrBrandDm.dart';
 import 'package:e_commerece/data/models/GetProductResponseDm.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
@@ -65,8 +66,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         );
         print("RESPONSE Profile BODY: ${response.data}");
         print("STATUS Profile CODE: ${response.statusCode}");
-     
-
 
         var brandResponse =
             GetAllCategoryOrBrandResponseDm.fromJson(response.data);
@@ -109,6 +108,43 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         } else {
           //todo: server ==> failure
           return Left(ServerError(errorMessage: productResponse.message!));
+        }
+      } else {
+        //todo:no internet
+        return Left(NetworkError(errorMessage: "No internet connection"));
+      }
+    } catch (e) {
+      //todo: error
+      return Left(Failures(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, AddCartResponseDto>> addToCart(
+      {required String productId}) async {
+    try {
+      final List<ConnectivityResult> connectivityResult =
+          await Connectivity().checkConnectivity();
+
+      if (connectivityResult.contains(ConnectivityResult.wifi) ||
+          connectivityResult.contains(ConnectivityResult.mobile)) {
+        var token = SharedPreferenceUtils.getData(key: 'token');
+
+        //todo:internet
+        var response = await apiMAnger.postData(
+            endPoint: ApiEndpoint.addToCart,
+            body: {"productId": productId},
+            headers: {'token': token});
+
+        print("RESPONSE Add To Cart BODY: ${response.data}");
+        print("RESPONSE Add To Cart CODE: ${response.statusCode}");
+        var cartResponse = AddCartResponseDto.fromJson(response.data);
+        if (response.statusCode! >= 200 && response.statusCode! < 300) {
+          //todo: server ==> success
+          return Right(cartResponse);
+        } else {
+          //todo: server ==> failure
+          return Left(ServerError(errorMessage: cartResponse.message!));
         }
       } else {
         //todo:no internet

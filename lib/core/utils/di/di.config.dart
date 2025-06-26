@@ -23,6 +23,7 @@ import '../../../data/repository/auth/auth_repository_impl.dart' as _i207;
 import '../../../data/repository/home/home_repository_impl.dart' as _i846;
 import '../../../domain/repositories/auth/auth_repostiory.dart' as _i511;
 import '../../../domain/repositories/home/home_repository.dart' as _i212;
+import '../../../domain/use_cases/add_product_cart_use_case.dart' as _i451;
 import '../../../domain/use_cases/get_all_Brand_use_case.dart' as _i116;
 import '../../../domain/use_cases/get_all_category_use_case.dart' as _i563;
 import '../../../domain/use_cases/get_products_use_case.dart' as _i697;
@@ -64,10 +65,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i798.LoginUseCase(authRepository: gh<_i511.AuthRepository>()));
     gh.factory<_i311.RegisterUseCase>(() =>
         _i311.RegisterUseCase(authRepository: gh<_i511.AuthRepository>()));
-    gh.factory<_i563.GetAllCategoryUseCase>(() => _i563.GetAllCategoryUseCase(
+    gh.factory<_i451.AddProductCartUseCase>(() => _i451.AddProductCartUseCase(
         homeRepository: gh<_i212.HomeRepository>()));
     gh.factory<_i116.GetAllBrandUseCase>(() =>
         _i116.GetAllBrandUseCase(homeRepository: gh<_i212.HomeRepository>()));
+    gh.factory<_i563.GetAllCategoryUseCase>(() => _i563.GetAllCategoryUseCase(
+        homeRepository: gh<_i212.HomeRepository>()));
     gh.factory<_i697.GetProductsUseCase>(() =>
         _i697.GetProductsUseCase(homeRepository: gh<_i212.HomeRepository>()));
     gh.factory<_i504.RegisterViewModel>(() =>
@@ -75,7 +78,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i51.LoginViewModel>(
         () => _i51.LoginViewModel(loginUseCase: gh<_i798.LoginUseCase>()));
     gh.factory<_i117.ProductTabViewModel>(() => _i117.ProductTabViewModel(
-        getProductsUseCase: gh<_i697.GetProductsUseCase>()));
+          getProductsUseCase: gh<_i697.GetProductsUseCase>(),
+          addProductCartUseCase: gh<_i451.AddProductCartUseCase>(),
+        ));
     gh.factory<_i1013.HomeTabViewModel>(() => _i1013.HomeTabViewModel(
           getAllCategoryUseCase: gh<_i563.GetAllCategoryUseCase>(),
           getAllBrandUseCase: gh<_i116.GetAllBrandUseCase>(),
