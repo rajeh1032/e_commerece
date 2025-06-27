@@ -3,6 +3,8 @@ import 'package:e_commerece/core/utils/app_theme.dart';
 import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/core/utils/my_bloc_observer.dart';
 import 'package:e_commerece/core/utils/di/di.dart';
+import 'package:e_commerece/features/cart_screen/cart_screen.dart';
+import 'package:e_commerece/features/cart_screen/cubit/cart_screen_view_model.dart';
 import 'package:e_commerece/features/ui/auth/login/login_screen.dart';
 import 'package:e_commerece/features/ui/auth/register/register_screen.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/home_screen.dart';
@@ -27,7 +29,7 @@ void main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<ProductTabViewModel>()),
-        // BlocProvider(create: (context) => getIt<CartViewModel>()),
+        // BlocProvider(create: (context) => getIt<CartScreenViewModel>()),
       ],
       child: MyApp(
         routeName: routeName,
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
             AppRoutes.loginRoute: (context) => LoginScreen(),
             AppRoutes.registerRoute: (context) => const RegisterScreen(),
             AppRoutes.homeRoute: (context) => HomeScreen(),
+            AppRoutes.cartRoute: (context) => CartScreen(),
           },
           theme: AppTheme.lightTheme,
         );

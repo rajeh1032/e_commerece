@@ -5,4 +5,5 @@ class ApiEndpoint {
   static const String getAllBrands = '/api/v1/brands';
   static const String getProducts = '/api/v1/products';
   static const String addToCart = '/api/v1/cart';
+  static const String getItemCart = '/api/v1/cart';
 }

@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     InkWell(
                       onTap: () {
-                        // Navigator.of(context).pushNamed(AppRoutes.cartRoute);
+                        Navigator.of(context).pushNamed(AppRoutes.cartRoute);
                       },
                       child: BlocBuilder<ProductTabViewModel, ProductTabStates>(
                         builder: (context, state) {
