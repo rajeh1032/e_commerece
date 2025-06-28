@@ -36,6 +36,8 @@ import '../../../domain/use_cases/get_item_in_cart_use_case.dart' as _i1056;
 import '../../../domain/use_cases/get_products_use_case.dart' as _i697;
 import '../../../domain/use_cases/login_use_case.dart' as _i798;
 import '../../../domain/use_cases/register_use_case.dart' as _i311;
+import '../../../domain/use_cases/removeCartItemUseCase.dart' as _i377;
+import '../../../domain/use_cases/upddate_cart_item_use_case.dart' as _i267;
 import '../../../features/cart_screen/cubit/cart_screen_view_model.dart'
     as _i698;
 import '../../../features/ui/auth/login/cubit/login_view_model.dart' as _i51;
@@ -86,14 +88,16 @@ extension GetItInjectableX on _i174.GetIt {
         homeRepository: gh<_i212.HomeRepository>()));
     gh.factory<_i697.GetProductsUseCase>(() =>
         _i697.GetProductsUseCase(homeRepository: gh<_i212.HomeRepository>()));
+    gh.factory<_i377.Removecartitemusecase>(() => _i377.Removecartitemusecase(
+        cartRepository: gh<_i197.CartRepository>()));
+    gh.factory<_i267.UpdateCartItemUseCase>(() => _i267.UpdateCartItemUseCase(
+        cartRepository: gh<_i197.CartRepository>()));
     gh.factory<_i504.RegisterViewModel>(() =>
         _i504.RegisterViewModel(registerUseCase: gh<_i311.RegisterUseCase>()));
     gh.factory<_i1056.GetItemInCartUseCase>(() => _i1056.GetItemInCartUseCase(
         cartReopsitory: gh<_i197.CartRepository>()));
     gh.factory<_i51.LoginViewModel>(
         () => _i51.LoginViewModel(loginUseCase: gh<_i798.LoginUseCase>()));
-    gh.factory<_i698.CartScreenViewModel>(() => _i698.CartScreenViewModel(
-        getItemInCartUseCase: gh<_i1056.GetItemInCartUseCase>()));
     gh.factory<_i117.ProductTabViewModel>(() => _i117.ProductTabViewModel(
           getProductsUseCase: gh<_i697.GetProductsUseCase>(),
           addProductCartUseCase: gh<_i451.AddProductCartUseCase>(),
@@ -101,6 +105,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1013.HomeTabViewModel>(() => _i1013.HomeTabViewModel(
           getAllCategoryUseCase: gh<_i563.GetAllCategoryUseCase>(),
           getAllBrandUseCase: gh<_i116.GetAllBrandUseCase>(),
+        ));
+    gh.factory<_i698.CartScreenViewModel>(() => _i698.CartScreenViewModel(
+          getItemInCartUseCase: gh<_i1056.GetItemInCartUseCase>(),
+          removecartitemusecase: gh<_i377.Removecartitemusecase>(),
+          updateCartItemUseCase: gh<_i267.UpdateCartItemUseCase>(),
         ));
     return this;
   }

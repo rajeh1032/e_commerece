@@ -1,5 +1,7 @@
 import 'package:e_commerece/core/utils/app_colors.dart';
+import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/core/utils/di/di.dart';
+import 'package:e_commerece/core/utils/dialog_utils.dart';
 import 'package:e_commerece/features/cart_screen/cubit/cart_screen_states.dart';
 import 'package:e_commerece/features/cart_screen/cubit/cart_screen_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/cart_item.dart';
@@ -16,32 +18,42 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: _customAppBar(context),
       body: BlocBuilder<CartScreenViewModel, CartScreenStates>(
-          bloc: viewModel..getCartItems(),
+          bloc: CartScreenViewModel.get(context)..getCartItems(),
           builder: (context, state) {
-            return state is CartScreenSuccessState
-                ? Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: viewModel.cartItems.length,
-                          itemBuilder: (context, index) {
-                            return CartItem(
-                              cartItems: viewModel.cartItems[index],
-                            );
-                          },
-                        ),
-                      ),
-                      _buildCheckOut(
-                          context,
-                          state.getCartResponseEntity.data!.totalCartPrice!
-                              .toDouble())
-                    ],
-                  )
-                : Center(
-                    child: const CircularProgressIndicator(
-                      color: AppColors.primaryColor,
+            if (state is CartScreenSuccessState) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount:
+                          state.getCartResponseEntity.data!.products!.length,
+                      itemBuilder: (context, index) {
+                        return CartItem(
+                          cartItems: state
+                              .getCartResponseEntity.data!.products![index],
+                        );
+                      },
                     ),
-                  );
+                  ),
+                  _buildCheckOut(
+                      context,
+                      state.getCartResponseEntity.data!.totalCartPrice!
+                          .toDouble())
+                ],
+              );
+            } else if (state is CartScreenErrorState) {
+              return Center(
+                  child: Text(
+                state.failures.errorMessage,
+                style: AppStyles.medium14PrimaryDark,
+              ));
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
+              );
+            }
           }),
     );
   }

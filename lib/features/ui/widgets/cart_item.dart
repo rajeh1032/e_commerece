@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/domain/entities/GetCartResponseEntity.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
+import 'package:e_commerece/features/cart_screen/cubit/cart_screen_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/custom_txt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class CartItem extends StatelessWidget {
     required this.cartItems,
   });
   GetCartProductsEntity cartItems;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -58,6 +60,11 @@ class CartItem extends StatelessWidget {
                                   //todo: decrement count
                                   int count = cartItems.count!.toInt();
                                   count--;
+
+                                  CartScreenViewModel.get(context)
+                                      .updateCartItem(
+                                          productId: cartItems.product!.id!,
+                                          count: "$count");
                                 },
                                 icon: Icon(
                                   Icons.remove_circle_outline_rounded,
@@ -74,8 +81,13 @@ class CartItem extends StatelessWidget {
                               IconButton(
                                 onPressed: () {
                                   //todo: increment count
+                                  int count = cartItems.count!.toInt();
+                                  count++;
 
-                                  //todo: decrement count
+                                  CartScreenViewModel.get(context)
+                                      .updateCartItem(
+                                          productId: cartItems.product!.id!,
+                                          count: "$count");
                                 },
                                 icon: Icon(
                                   Icons.add_circle_outline_rounded,
@@ -111,7 +123,7 @@ Widget _buildItemHeader(
       InkWell(
         onTap: () {
           // TODO: delete item from cart
-          // CartViewModel.get(context).deleteItemsInCart(productId);
+          CartScreenViewModel.get(context).removeCartItem(productId: productId);
         },
         child: Icon(
           CupertinoIcons.delete,

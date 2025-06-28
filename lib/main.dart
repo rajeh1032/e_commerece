@@ -29,7 +29,7 @@ void main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<ProductTabViewModel>()),
-        // BlocProvider(create: (context) => getIt<CartScreenViewModel>()),
+        BlocProvider(create: (context) => getIt<CartScreenViewModel>()),
       ],
       child: MyApp(
         routeName: routeName,

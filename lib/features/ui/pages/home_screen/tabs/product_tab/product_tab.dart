@@ -1,4 +1,5 @@
 import 'package:e_commerece/core/utils/di/di.dart';
+import 'package:e_commerece/features/cart_screen/cubit/cart_screen_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_states.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/product_tab_item.dart';
@@ -8,12 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductTab extends StatelessWidget {
   ProductTab({super.key});
+
   ProductTabViewModel viewModel = getIt<ProductTabViewModel>();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc:viewModel..getProducts(),
+      bloc: viewModel..getProducts(),
       buildWhen: (previous, current) =>
           current is ProductLoadingState ||
           current is ProductSuccessState ||

@@ -2,13 +2,13 @@ import 'package:e_commerece/core/utils/app_assets.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
-import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/cubit/home_screen_state.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/cubit/home_screen_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_states.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_commerece/core/utils/di/di.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenViewModel viewModel = getIt<HomeScreenViewModel>();
 
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenViewModel, HomeScreenState>(
       bloc: viewModel,
