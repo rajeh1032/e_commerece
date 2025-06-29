@@ -12,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({super.key});
-  CartScreenViewModel viewModel = getIt<CartScreenViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

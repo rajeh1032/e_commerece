@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/favorite_tab/cubit/favorite_tab_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/custom_txt.dart';
 import 'package:flutter/foundation.dart';
@@ -50,6 +51,9 @@ class ProductTabItem extends StatelessWidget {
                     child: IconButton(
                         onPressed: () {
                           //todo: add to fav
+                          FavoriteTabViewModel.get(context).addItemFavorite(
+                              productId: productDataEntity.id!);
+                          print("productDataEntity id${productDataEntity.id}");
                         },
                         color: AppColors.primaryColor,
                         padding: EdgeInsets.zero,

@@ -1,4 +1,7 @@
+import 'package:e_commerece/core/utils/app_colors.dart';
+import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/core/utils/di/di.dart';
+import 'package:e_commerece/core/utils/dialog_utils.dart';
 import 'package:e_commerece/features/cart_screen/cubit/cart_screen_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_states.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
@@ -9,12 +12,31 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductTab extends StatelessWidget {
   ProductTab({super.key});
-
-  ProductTabViewModel viewModel = getIt<ProductTabViewModel>();
+  late ProductTabViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    viewModel = BlocProvider.of<ProductTabViewModel>(context);
+    return BlocConsumer(
+      listener: (context, state) {
+        if (state is AddCarSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "✅ Product added to cart successfully!",
+                style: AppStyles.medium18White,
+              ),
+              backgroundColor: AppColors.primaryColor.withOpacity(0.9),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+          );
+        }
+      },
       bloc: viewModel..getProducts(),
       buildWhen: (previous, current) =>
           current is ProductLoadingState ||

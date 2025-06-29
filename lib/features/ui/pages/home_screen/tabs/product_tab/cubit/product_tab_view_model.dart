@@ -35,7 +35,7 @@ class ProductTabViewModel extends Cubit<ProductTabStates> {
 
   int cartCounter = 0;
   void addToCart({required String productId}) async {
-    emit(AddCarLoadingState());
+    // emit(AddCarLoadingState());
     var either = await addProductCartUseCase.invoke(productId: productId);
     either.fold((error) {
       emit(AddCarErrorState(failures: error));
