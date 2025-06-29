@@ -1,6 +1,7 @@
 import 'package:e_commerece/domain/entities/GetFavoriteItemResponseEntity.dart';
 import 'package:e_commerece/domain/use_cases/add_item_favorite_use_case.dart';
 import 'package:e_commerece/domain/use_cases/get_ItemFavorite_use_case.dart';
+import 'package:e_commerece/domain/use_cases/remove_item_favorite_use_case.dart';
 
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/favorite_tab/cubit/favorite_tab_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +11,11 @@ import 'package:injectable/injectable.dart';
 class FavoriteTabViewModel extends Cubit<FavoriteTabStates> {
   AddItemFavoriteUseCase addItemFavoriteUseCase;
   GetItemfavoriteUseCase getItemfavoriteUseCase;
+  RemoveItemFavoriteUseCase removeItemFavoriteUseCase;
   FavoriteTabViewModel(
       {required this.addItemFavoriteUseCase,
-      required this.getItemfavoriteUseCase})
+      required this.getItemfavoriteUseCase,
+      required this.removeItemFavoriteUseCase})
       : super(GetFavoriteLoadingState());
 
   //todo: hold Data handle Logic
@@ -40,6 +43,16 @@ class FavoriteTabViewModel extends Cubit<FavoriteTabStates> {
       emit(FavoriteErrorState(failures: error));
     }, (response) {
       emit(FavoriteSuccessState(addItemFavoriteResponseEntity: response));
+    });
+  }
+
+  void removeItemFavorite({required String productId}) async {
+    emit(RemoveItemFavoriteLoadingState());
+    var either = await removeItemFavoriteUseCase.invoke(productId: productId);
+    either.fold((error) {
+      emit(RemoveItemFavoriteErrorState(failures: error));
+    }, (response) {
+      emit(RemoveItemFavoriteSuccessState(removeFavoriteItemEntity: response));
     });
   }
 }

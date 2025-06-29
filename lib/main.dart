@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_theme.dart';
 import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
@@ -13,9 +15,14 @@ import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentsDir.path);
+
   Bloc.observer = MyBlocObserver();
   configureDependencies();
   await SharedPreferenceUtils.init();
@@ -31,7 +38,7 @@ void main() async {
       providers: [
         BlocProvider(create: (context) => getIt<ProductTabViewModel>()),
         BlocProvider(create: (context) => getIt<CartScreenViewModel>()),
-         BlocProvider(create: (context) => getIt<FavoriteTabViewModel>()),
+        BlocProvider(create: (context) => getIt<FavoriteTabViewModel>()),
       ],
       child: MyApp(
         routeName: routeName,

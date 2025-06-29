@@ -7,8 +7,7 @@ import 'package:e_commerece/core/utils/cache/shared_preference_utils.dart';
 import 'package:e_commerece/data/data_sources/remote/favorite_remote_data_source.dart';
 import 'package:e_commerece/data/models/AddItemFavoriteResponseDto.dart';
 import 'package:e_commerece/data/models/GetFavoriteItemResponseDto.dart';
-import 'package:e_commerece/domain/entities/AddItemFavoriteResponseEntity.dart';
-import 'package:e_commerece/domain/entities/GetFavoriteItemResponseEntity.dart';
+import 'package:e_commerece/data/models/RemoveFavoriteItemResponseDto.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: FavoriteRemoteDataSource)
@@ -69,6 +68,41 @@ class FavoriteRemoteDataSourceImpl implements FavoriteRemoteDataSource {
         );
 
         var cartResponse = GetFavoriteItemResponseDto.fromJson(response.data);
+        if (response.statusCode! >= 200 && response.statusCode! < 300) {
+          //todo: server ==> success
+          return Right(cartResponse);
+        } else {
+          //todo: server ==> failure
+          return Left(ServerError(errorMessage: cartResponse.message!));
+        }
+      } else {
+        //todo:no internet
+        return Left(NetworkError(errorMessage: "No internet connection"));
+      }
+    } catch (e) {
+      //todo: error
+      return Left(Failures(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, RemoveFavoriteItemDto>> removeItemFavorite(
+      {required String productId}) async {
+    try {
+      final List<ConnectivityResult> connectivityResult =
+          await Connectivity().checkConnectivity();
+
+      var token = SharedPreferenceUtils.getData(key: 'token');
+
+      if (connectivityResult.contains(ConnectivityResult.wifi) ||
+          connectivityResult.contains(ConnectivityResult.mobile)) {
+        //todo:internet
+        var response = await apiMAnger.deleteData(
+          endPoint: '${ApiEndpoint.favoriteItem}/${productId}',
+          headers: {'token': token},
+        );
+
+        var cartResponse = RemoveFavoriteItemDto.fromJson(response.data);
         if (response.statusCode! >= 200 && response.statusCode! < 300) {
           //todo: server ==> success
           return Right(cartResponse);

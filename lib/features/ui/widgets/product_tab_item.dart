@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerece/core/utils/app_assets.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
@@ -9,10 +10,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductTabItem extends StatelessWidget {
+class ProductTabItem extends StatefulWidget {
   ProductDataEntity productDataEntity;
   ProductTabItem({Key? key, required this.productDataEntity}) : super(key: key);
+  String heartIcon = AppAssets.selectedFavouriteIcon;
 
+  bool isClicked = false;
+
+  @override
+  State<ProductTabItem> createState() => _ProductTabItemState();
+}
+
+class _ProductTabItemState extends State<ProductTabItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +38,7 @@ class ProductTabItem extends StatelessWidget {
                   width: 191.w,
                   height: 120.h,
                   fit: BoxFit.cover,
-                  imageUrl: productDataEntity.imageCover ?? '',
+                  imageUrl: widget.productDataEntity.imageCover ?? '',
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(
                       color: AppColors.primaryDark,
@@ -51,15 +60,26 @@ class ProductTabItem extends StatelessWidget {
                     child: IconButton(
                         onPressed: () {
                           //todo: add to fav
-                          FavoriteTabViewModel.get(context).addItemFavorite(
-                              productId: productDataEntity.id!);
-                          print("productDataEntity id${productDataEntity.id}");
+                          widget.isClicked = !widget.isClicked;
+                          widget.heartIcon = !widget.isClicked
+                              ? AppAssets.selectedFavouriteIcon
+                              : AppAssets.selectedAddToFavouriteIcon;
+                          setState(() {});
+
+                          if (widget.isClicked) {
+                            FavoriteTabViewModel.get(context).addItemFavorite(
+                                productId: widget.productDataEntity.id!);
+                          } else {
+                            FavoriteTabViewModel.get(context)
+                                .removeItemFavorite(
+                                    productId: widget.productDataEntity.id!);
+                          }
                         },
                         color: AppColors.primaryColor,
                         padding: EdgeInsets.zero,
                         iconSize: 30.r,
-                        icon: const Icon(
-                          Icons.favorite_border_rounded,
+                        icon: ImageIcon(
+                          AssetImage(widget.heartIcon),
                           color: AppColors.primaryColor,
                         )),
                   ),
@@ -74,7 +94,7 @@ class ProductTabItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTxt(
-                  text: productDataEntity.title ?? "",
+                  text: widget.productDataEntity.title ?? "",
                   fontSize: 12.sp,
                 ),
                 SizedBox(
@@ -82,12 +102,12 @@ class ProductTabItem extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    CustomTxt(text: "EGP ${productDataEntity.price}"),
+                    CustomTxt(text: "EGP ${widget.productDataEntity.price}"),
                     SizedBox(
                       width: 8.w,
                     ),
                     CustomTxt(
-                      text: "EGP ${productDataEntity.price! * 2}",
+                      text: "EGP ${widget.productDataEntity.price! * 2}",
                       textStyle: AppStyles.regular11SalePrice
                           .copyWith(decoration: TextDecoration.lineThrough),
                     )
@@ -99,7 +119,8 @@ class ProductTabItem extends StatelessWidget {
                 Row(
                   children: [
                     CustomTxt(
-                      text: "Review (${productDataEntity.ratingsAverage})",
+                      text:
+                          "Review (${widget.productDataEntity.ratingsAverage})",
                       fontSize: 12.sp,
                     ),
                     Icon(
@@ -113,8 +134,8 @@ class ProductTabItem extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         //   todo add to cart
-                        ProductTabViewModel.get(context)
-                            .addToCart(productId: productDataEntity.id ?? '');
+                        ProductTabViewModel.get(context).addToCart(
+                            productId: widget.productDataEntity.id ?? '');
                         print(
                             "counter of cart ${ProductTabViewModel.get(context).cartCounter}");
                       },

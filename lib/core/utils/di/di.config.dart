@@ -46,6 +46,7 @@ import '../../../domain/use_cases/get_ItemFavorite_use_case.dart' as _i776;
 import '../../../domain/use_cases/get_products_use_case.dart' as _i697;
 import '../../../domain/use_cases/login_use_case.dart' as _i798;
 import '../../../domain/use_cases/register_use_case.dart' as _i311;
+import '../../../domain/use_cases/remove_item_favorite_use_case.dart' as _i662;
 import '../../../domain/use_cases/removeCartItemUseCase.dart' as _i377;
 import '../../../domain/use_cases/upddate_cart_item_use_case.dart' as _i267;
 import '../../../features/cart_screen/cubit/cart_screen_view_model.dart'
@@ -118,6 +119,9 @@ extension GetItInjectableX on _i174.GetIt {
         favoriteRepository: gh<_i1036.FavoriteRepository>()));
     gh.factory<_i776.GetItemfavoriteUseCase>(() => _i776.GetItemfavoriteUseCase(
         favoriteRepository: gh<_i1036.FavoriteRepository>()));
+    gh.factory<_i662.RemoveItemFavoriteUseCase>(() =>
+        _i662.RemoveItemFavoriteUseCase(
+            favoriteRepository: gh<_i1036.FavoriteRepository>()));
     gh.factory<_i117.ProductTabViewModel>(() => _i117.ProductTabViewModel(
           getProductsUseCase: gh<_i697.GetProductsUseCase>(),
           addProductCartUseCase: gh<_i451.AddProductCartUseCase>(),
@@ -134,6 +138,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i328.FavoriteTabViewModel>(() => _i328.FavoriteTabViewModel(
           addItemFavoriteUseCase: gh<_i680.AddItemFavoriteUseCase>(),
           getItemfavoriteUseCase: gh<_i776.GetItemfavoriteUseCase>(),
+          removeItemFavoriteUseCase: gh<_i662.RemoveItemFavoriteUseCase>(),
         ));
     return this;
   }

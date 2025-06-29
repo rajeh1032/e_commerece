@@ -6,6 +6,7 @@ import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
 import 'package:e_commerece/domain/entities/GetFavoriteItemResponseEntity.dart';
+import 'package:e_commerece/features/ui/pages/home_screen/tabs/favorite_tab/cubit/favorite_tab_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
 import 'package:e_commerece/features/ui/widgets/custom_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,11 +90,21 @@ class _FavoriteItemState extends State<FavoriteItem> {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             onTap: () {
+                              //todo: add favorite
                               setState(() {
                                 widget.isClicked = !widget.isClicked;
                                 widget.heartIcon = !widget.isClicked
                                     ? AppAssets.selectedFavouriteIcon
                                     : AppAssets.selectedAddToFavouriteIcon;
+                                if (widget.isClicked) {
+                                  FavoriteTabViewModel.get(context)
+                                      .addItemFavorite(
+                                          productId: widget.product.id!);
+                                } else {
+                                  FavoriteTabViewModel.get(context)
+                                      .removeItemFavorite(
+                                          productId: widget.product.id!);
+                                }
                               });
                             },
                             child: Material(
@@ -131,7 +142,6 @@ class _FavoriteItemState extends State<FavoriteItem> {
                                 //   todo add to cart
                                 ProductTabViewModel.get(context).addToCart(
                                     productId: widget.product.id ?? '');
-                                    
                               },
                               backgroundColor: AppColors.primaryColor,
                               textStyle: AppStyles.medium14Category
