@@ -13,63 +13,71 @@ class FavoriteTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProductTabViewModel, ProductTabStates>(
-      listener: (context, state) {
-        if (state is AddCarSuccessState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "✅ Product added to cart successfully!",
-                style: AppStyles.medium18White,
-              ),
-              backgroundColor: AppColors.primaryColor.withOpacity(0.9),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-          );
-        }
-      },
-      builder: (context, productState) {
-        return BlocBuilder<FavoriteTabViewModel, FavoriteTabStates>(
-          bloc: FavoriteTabViewModel.get(context)..getItemFavorite(),
-          builder: (context, state) {
-            if (state is GetFavoriteSuccessState) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) => FavoriteItem(
-                        product: FavoriteTabViewModel.get(context)
-                            .favoriteItemList[index],
-                      ),
-                      itemCount: FavoriteTabViewModel.get(context)
-                          .favoriteItemList
-                          .length,
-                    ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ProductTabViewModel, ProductTabStates>(
+          listenWhen: (previous, current) => current is AddCarSuccessState,
+          listener: (context, state) {
+            if (state is AddCarSuccessState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "✅ Product added to cart successfully!",
+                    style: AppStyles.medium18White,
                   ),
-                ],
-              );
-            } else if (state is GetFavoriteErrorState) {
-              return Center(
-                child: Text(
-                  state.failures.errorMessage,
-                  style: AppStyles.medium14PrimaryDark,
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
+                  backgroundColor: AppColors.primaryColor.withOpacity(0.9),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               );
             }
           },
-        );
-      },
+        )
+      ],
+      child: BlocBuilder<FavoriteTabViewModel, FavoriteTabStates>(
+        bloc: FavoriteTabViewModel.get(context)..getItemFavorite(),
+        buildWhen: (previous, current) =>
+            current is GetFavoriteLoadingState ||
+            current is GetFavoriteSuccessState ||
+            current is GetFavoriteErrorState,
+        builder: (context, state) {
+          if (state is GetFavoriteSuccessState) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => FavoriteItem(
+                      product: FavoriteTabViewModel.get(context)
+                          .favoriteItemList[index],
+                    ),
+                    itemCount: FavoriteTabViewModel.get(context)
+                        .favoriteItemList
+                        .length,
+                  ),
+                ),
+              ],
+            );
+          } else if (state is GetFavoriteErrorState) {
+            return Center(
+              child: Text(
+                state.failures.errorMessage,
+                style: AppStyles.medium14PrimaryDark,
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

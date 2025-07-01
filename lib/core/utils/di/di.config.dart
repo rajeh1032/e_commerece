@@ -63,6 +63,7 @@ import '../../../features/ui/pages/home_screen/tabs/home_tab/cubit/home_tab_view
 import '../../../features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart'
     as _i117;
 import '../../api/api_manger.dart' as _i254;
+import '../cache/hive_utils.dart' as _i790;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -77,6 +78,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i543.HomeScreenViewModel>(() => _i543.HomeScreenViewModel());
     gh.singleton<_i254.ApiManger>(() => _i254.ApiManger());
+    gh.singleton<_i790.HiveUtils>(() => _i790.HiveUtils());
     gh.factory<_i419.CartRemoteDataSource>(
         () => _i296.CartRemoteDataSourceImpl(apiMAnger: gh<_i254.ApiManger>()));
     gh.factory<_i930.AuthRemoteDataSource>(
@@ -126,6 +128,12 @@ extension GetItInjectableX on _i174.GetIt {
           getProductsUseCase: gh<_i697.GetProductsUseCase>(),
           addProductCartUseCase: gh<_i451.AddProductCartUseCase>(),
         ));
+    gh.factory<_i328.FavoriteTabViewModel>(() => _i328.FavoriteTabViewModel(
+          addItemFavoriteUseCase: gh<_i680.AddItemFavoriteUseCase>(),
+          getItemfavoriteUseCase: gh<_i776.GetItemfavoriteUseCase>(),
+          removeItemFavoriteUseCase: gh<_i662.RemoveItemFavoriteUseCase>(),
+          hiveUtils: gh<_i790.HiveUtils>(),
+        ));
     gh.factory<_i1013.HomeTabViewModel>(() => _i1013.HomeTabViewModel(
           getAllCategoryUseCase: gh<_i563.GetAllCategoryUseCase>(),
           getAllBrandUseCase: gh<_i116.GetAllBrandUseCase>(),
@@ -134,11 +142,6 @@ extension GetItInjectableX on _i174.GetIt {
           getItemInCartUseCase: gh<_i1056.GetItemInCartUseCase>(),
           removecartitemusecase: gh<_i377.Removecartitemusecase>(),
           updateCartItemUseCase: gh<_i267.UpdateCartItemUseCase>(),
-        ));
-    gh.factory<_i328.FavoriteTabViewModel>(() => _i328.FavoriteTabViewModel(
-          addItemFavoriteUseCase: gh<_i680.AddItemFavoriteUseCase>(),
-          getItemfavoriteUseCase: gh<_i776.GetItemfavoriteUseCase>(),
-          removeItemFavoriteUseCase: gh<_i662.RemoveItemFavoriteUseCase>(),
         ));
     return this;
   }

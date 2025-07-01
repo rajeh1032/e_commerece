@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerece/core/utils/app_assets.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
+import 'package:e_commerece/core/utils/cache/hive_utils.dart';
 import 'package:e_commerece/domain/entities/GetProductResponseEntity.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/favorite_tab/cubit/favorite_tab_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
@@ -13,15 +14,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProductTabItem extends StatefulWidget {
   ProductDataEntity productDataEntity;
   ProductTabItem({Key? key, required this.productDataEntity}) : super(key: key);
-  String heartIcon = AppAssets.selectedFavouriteIcon;
 
-  bool isClicked = false;
 
   @override
   State<ProductTabItem> createState() => _ProductTabItemState();
 }
 
 class _ProductTabItemState extends State<ProductTabItem> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfFavorite();
+  }
+
+  bool isFavorite = false;
+  void checkIfFavorite() async {
+    final fav = await HiveUtils().isFavorite(widget.productDataEntity.id!);
+    setState(() {
+      isFavorite = fav;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,32 +70,39 @@ class _ProductTabItemState extends State<ProductTabItem> {
                 child: CircleAvatar(
                   backgroundColor: AppColors.whiteColor,
                   radius: 20.r,
-                  child: Center(
-                    child: IconButton(
-                        onPressed: () {
-                          //todo: add to fav
-                          widget.isClicked = !widget.isClicked;
-                          widget.heartIcon = !widget.isClicked
-                              ? AppAssets.selectedFavouriteIcon
-                              : AppAssets.selectedAddToFavouriteIcon;
-                          setState(() {});
+                  child: IconButton(
+                    onPressed: () async {
+                      setState(() {
+                        isFavorite = !isFavorite;
+                      });
 
-                          if (widget.isClicked) {
-                            FavoriteTabViewModel.get(context).addItemFavorite(
-                                productId: widget.productDataEntity.id!);
-                          } else {
-                            FavoriteTabViewModel.get(context)
-                                .removeItemFavorite(
-                                    productId: widget.productDataEntity.id!);
-                          }
-                        },
-                        color: AppColors.primaryColor,
-                        padding: EdgeInsets.zero,
-                        iconSize: 30.r,
-                        icon: ImageIcon(
-                          AssetImage(widget.heartIcon),
-                          color: AppColors.primaryColor,
-                        )),
+                      if (isFavorite) {
+                        await FavoriteTabViewModel.get(context).addItemFavorite(
+                          productId: widget.productDataEntity.id!,
+                        );
+                      } else {
+                        await FavoriteTabViewModel.get(context)
+                            .removeItemFavorite(
+                          productId: widget.productDataEntity.id!,
+                        );
+                      }
+
+                      final updated = await HiveUtils()
+                          .isFavorite(widget.productDataEntity.id!);
+                      setState(() {
+                        isFavorite = updated;
+                      });
+                    },
+                    iconSize: 30.r,
+                    padding: EdgeInsets.zero,
+                    icon: ImageIcon(
+                      AssetImage(
+                        isFavorite
+                            ? AppAssets.selectedAddToFavouriteIcon
+                            : AppAssets.selectedFavouriteIcon,
+                      ),
+                      color: AppColors.primaryColor,
+                    ),
                   ),
                 ),
               ),

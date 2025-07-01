@@ -5,6 +5,7 @@ import 'package:e_commerece/core/utils/app_assets.dart';
 import 'package:e_commerece/core/utils/app_colors.dart';
 import 'package:e_commerece/core/utils/app_routes.dart';
 import 'package:e_commerece/core/utils/app_styles.dart';
+import 'package:e_commerece/core/utils/cache/hive_utils.dart';
 import 'package:e_commerece/domain/entities/GetFavoriteItemResponseEntity.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/favorite_tab/cubit/favorite_tab_view_model.dart';
 import 'package:e_commerece/features/ui/pages/home_screen/tabs/product_tab/cubit/product_tab_view_model.dart';
@@ -15,9 +16,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavoriteItem extends StatefulWidget {
   final GetFavoriteDataEntity product;
-  String heartIcon = AppAssets.selectedFavouriteIcon;
-
-  bool isClicked = false;
 
   FavoriteItem({super.key, required this.product});
 
@@ -26,6 +24,21 @@ class FavoriteItem extends StatefulWidget {
 }
 
 class _FavoriteItemState extends State<FavoriteItem> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfFavorite();
+  }
+
+  bool isFavorite = false;
+  void checkIfFavorite() async {
+    final fav = await HiveUtils().isFavorite(widget.product.id!);
+    setState(() {
+      isFavorite = fav;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -85,26 +98,32 @@ class _FavoriteItemState extends State<FavoriteItem> {
                                 : widget.product.title!,
                             style: AppStyles.medium18Header,
                           ),
-                          InkWell(
-                            customBorder: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            onTap: () {
-                              //todo: add favorite
+                          GestureDetector(
+                            // customBorder: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(16),
+                            // ),
+
+                            onTap: () async {
                               setState(() {
-                                widget.isClicked = !widget.isClicked;
-                                widget.heartIcon = !widget.isClicked
-                                    ? AppAssets.selectedFavouriteIcon
-                                    : AppAssets.selectedAddToFavouriteIcon;
-                                if (widget.isClicked) {
-                                  FavoriteTabViewModel.get(context)
-                                      .addItemFavorite(
-                                          productId: widget.product.id!);
-                                } else {
-                                  FavoriteTabViewModel.get(context)
-                                      .removeItemFavorite(
-                                          productId: widget.product.id!);
-                                }
+                                isFavorite = !isFavorite;
+                              });
+
+                              if (isFavorite) {
+                                await FavoriteTabViewModel.get(context)
+                                    .addItemFavorite(
+                                  productId: widget.product.id!,
+                                );
+                              } else {
+                                await FavoriteTabViewModel.get(context)
+                                    .removeItemFavorite(
+                                  productId: widget.product.id!,
+                                );
+                              }
+
+                              final updated = await HiveUtils()
+                                  .isFavorite(widget.product.id!);
+                              setState(() {
+                                isFavorite = updated;
                               });
                             },
                             child: Material(
@@ -113,11 +132,16 @@ class _FavoriteItemState extends State<FavoriteItem> {
                               shape: const StadiumBorder(),
                               shadowColor: AppColors.blackColor,
                               child: Padding(
-                                  padding: const EdgeInsets.all(6),
-                                  child: ImageIcon(
-                                    AssetImage(widget.heartIcon),
-                                    color: AppColors.primaryColor,
-                                  )),
+                                padding: const EdgeInsets.all(6),
+                                child: ImageIcon(
+                                  AssetImage(
+                                    isFavorite
+                                        ? AppAssets.selectedAddToFavouriteIcon
+                                        : AppAssets.selectedFavouriteIcon,
+                                  ),
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
                             ),
                           ),
                         ]),

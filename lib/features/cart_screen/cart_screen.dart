@@ -17,6 +17,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: _customAppBar(context),
       body: BlocBuilder<CartScreenViewModel, CartScreenStates>(
+     
           bloc: CartScreenViewModel.get(context)..getCartItems(),
           builder: (context, state) {
             if (state is CartScreenSuccessState) {

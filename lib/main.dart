@@ -22,6 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentsDir.path);
+  await Hive.openBox('favoritesBox');
 
   Bloc.observer = MyBlocObserver();
   configureDependencies();

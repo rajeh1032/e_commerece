@@ -1,3 +1,4 @@
+import 'package:e_commerece/core/utils/cache/hive_utils.dart';
 import 'package:e_commerece/domain/entities/GetFavoriteItemResponseEntity.dart';
 import 'package:e_commerece/domain/use_cases/add_item_favorite_use_case.dart';
 import 'package:e_commerece/domain/use_cases/get_ItemFavorite_use_case.dart';
@@ -12,10 +13,12 @@ class FavoriteTabViewModel extends Cubit<FavoriteTabStates> {
   AddItemFavoriteUseCase addItemFavoriteUseCase;
   GetItemfavoriteUseCase getItemfavoriteUseCase;
   RemoveItemFavoriteUseCase removeItemFavoriteUseCase;
+  final HiveUtils hiveUtils;
   FavoriteTabViewModel(
       {required this.addItemFavoriteUseCase,
       required this.getItemfavoriteUseCase,
-      required this.removeItemFavoriteUseCase})
+      required this.removeItemFavoriteUseCase,
+      required this.hiveUtils})
       : super(GetFavoriteLoadingState());
 
   //todo: hold Data handle Logic
@@ -24,34 +27,35 @@ class FavoriteTabViewModel extends Cubit<FavoriteTabStates> {
       BlocProvider.of<FavoriteTabViewModel>(context);
   List<GetFavoriteDataEntity> favoriteItemList = [];
 
-  void getItemFavorite() async {
+  Future<void> getItemFavorite() async {
     emit(GetFavoriteLoadingState());
     var either = await getItemfavoriteUseCase.invoke();
     either.fold((error) {
       emit(GetFavoriteErrorState(failures: error));
     }, (response) {
       favoriteItemList = response.data!;
-      print("mydata ${favoriteItemList.length}");
       emit(GetFavoriteSuccessState(getFavoriteItemResponseEntity: response));
     });
   }
 
-  void addItemFavorite({required String productId}) async {
+  Future<void> addItemFavorite({required String productId}) async {
     emit(FavoriteLoadingState());
     var either = await addItemFavoriteUseCase.invoke(productId: productId);
     either.fold((error) {
       emit(FavoriteErrorState(failures: error));
-    }, (response) {
+    }, (response) async {
+      await hiveUtils.saveFavorite(productId);
       emit(FavoriteSuccessState(addItemFavoriteResponseEntity: response));
     });
   }
 
-  void removeItemFavorite({required String productId}) async {
+  Future<void> removeItemFavorite({required String productId}) async {
     emit(RemoveItemFavoriteLoadingState());
     var either = await removeItemFavoriteUseCase.invoke(productId: productId);
     either.fold((error) {
       emit(RemoveItemFavoriteErrorState(failures: error));
-    }, (response) {
+    }, (response) async {
+      await hiveUtils.removeFavorite(productId);
       emit(RemoveItemFavoriteSuccessState(removeFavoriteItemEntity: response));
     });
   }
